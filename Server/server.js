@@ -1,26 +1,19 @@
-const { express, bodyParser } = require('./imports')
+const { express,bodyParser,mongoose, color } = require('./imports')
+const app = express()
 
-let app = express()
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
+app.use(require('./Controller/usuario'))
 
-app.get('/usuario',(req,res)=>{
-    res.json('GET {Wester Mateo Medina}')
+
+
+mongoose.connect(process.env.DBConnectionString,
+                  {useNewUrlParser: true, useCreateIndex:true, useUnifiedTopology:true},
+                  (err, res)=>{
+  if (err) throw err
+    console.log(`Base de datos ${color.green('ONLINE')}`)
 })
-app.post('/usuario',(req,res)=>{
-    let body = req.body
-    res.json(body)
-  })
-app.put('/usuario/:id',(req,res)=>{
-    let id = req.params.id
-        res.json({
-            id,
-            nombre: `Wester Mateo Medina`
-        })
-})
-app.delete('/usuario',(req,res)=>{
-    res.json('DELETE {Wester Mateo Medina}')
-  })
+
 app.listen(process.env.PORT,()=>{
     console.log(`Escuchando peticiones en el puerto ${process.env.PORT}`)
 })
